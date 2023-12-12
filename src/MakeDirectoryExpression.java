@@ -1,3 +1,5 @@
+import java.util.regex.Pattern;
+
 class MakeDirectoryExpression implements Expression {
     private final String directoryName;
 
@@ -32,13 +34,10 @@ class MakeDirectoryExpression implements Expression {
         if (directoryName.isEmpty()) {
             return false;
         }
+    // Wyrażenie regularne do sprawdzenia, czy ciąg zawiera tylko litery i cyfry
+        String regex = "^[a-zA-Z0-9]+$";
 
-        // Sprawdź, czy podana nazwa zawiera więcej niż jedną kropkę
-        if (directoryName.indexOf('.') > 0) {
-            return false;
-        }
-
-        // Nazwa katalogu jest prawidłowa
-        return true;
+        // Sprawdź dopasowanie wyrażenia regularnego
+        return Pattern.matches(regex, directoryName);
     }
 }

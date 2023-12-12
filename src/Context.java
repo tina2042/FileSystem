@@ -16,6 +16,7 @@ class Context {
         return currentNode;
     }
 
+
     public void setCurrentNode(Node currentNode) {
         this.currentNode = currentNode;
     }
@@ -51,17 +52,38 @@ class Context {
 
         String[] parts = path.split("/");
         Catalog current = rootNode;
+        boolean found = false;
+
+        if(parts.length==1){
+
+            if(current.getName().equals(parts[0])){
+                found = true;
+            } else {
+                for (Node component : current.getChildrenNodes()) {
+                    if (component instanceof Catalog && component.getName().equals(parts[0])) {
+                        current = (Catalog) component;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if(found) return current;
+            else{
+            return (Catalog)currentNode;}
+        }
+
 
         for (String part : parts) {
             if (part.isEmpty()) {
                 continue;  // Pomijamy puste części w przypadku ścieżki zakończonej "/"
             }
 
-            boolean found = false;
+
             if(current.getName().equals(part)){
                 found = true;
                 break;
-            }else{
+            } else {
+
             for (Node component : current.getChildrenNodes()) {
                 if (component instanceof Catalog && component.getName().equals(part)) {
                     current = (Catalog) component;
@@ -72,6 +94,7 @@ class Context {
             }
 
             if (!found) {
+
                 // Jeżeli nie znaleziono katalogu o danej nazwie, zwracamy null
                 return null;
             }
@@ -111,4 +134,5 @@ class Context {
             return null; // Ostatni element ścieżki nie jest plikiem
         }
     }
+
 }
